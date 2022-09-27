@@ -1,9 +1,8 @@
 
-Breve descrição do grupo
 
-* Turno: [LM]XX
-* Grupo: YY
+* Turno: [10]
+* Grupo: 03
 * Alunos:
-    - Aluno1 upZZZZZ 
-    - Aluno2 upZZZZZ
-    - Aluno3 upZZZZZ
+    - João Duarte up201707984
+    - Miguel Tavares up20200281
+    - João Veloso up202005801
