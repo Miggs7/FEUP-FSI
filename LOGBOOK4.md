@@ -18,7 +18,7 @@ We also used the **printenv PWD** command and got the following output:
 
 ### **Task 2 - Passing Environment Variables from Parent Process to Child Process**
 
-- We compiled the program given **(gcc myprintenv.c -o cPrint.out gcc myprintenv.c -o pPrint.out)** into two binaries, each differing on which process would print the environment variables (parent or child)
+- We compiled the program given **(gcc myprintenv.c -o childprint.out gcc myprintenv.c -o parentprint.out)** into two binaries, each differing on which process would print the environment variables (parent or child)
 
 - Run both programs and directed their output to different files. The output was the environment variables they received
 
@@ -92,4 +92,35 @@ int main()
 
 
 
+
 ### **Task 4 - Environment Variables and system()**
+
+Code given: 
+
+``` c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    system("/usr/bin/env");
+    return 0 ;
+}
+```
+
+- We created a file called systemteste.c, after compiling we found that the file calls a similar process to the task 3, using system instead of execve. 
+
+- The output was once more the parent process environment variables, since the "system" function uses "execl", which calls "execve" with the parent process environment variabels, which finally executes /bin/sh with the argument written to "system"
+
+
+
+**TERMINAL PRINT ON TASK 4**
+
+![Terminal print of task 4](/images/task4.png)
+
+
+
+### **Task 5 - Environment Variable and Set-UID Programs**
+
+
+
