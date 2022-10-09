@@ -153,7 +153,7 @@ int main()
 }
 ```
 
-- We created a file called myls.c, after we compilled to an executable (./ls) we exported the its path, to the PATH variable making it possible to run like if it was the original bash command, giving the possibility the run malicious code.
+- We created a file called myls.c, after we compilled to an executable (./ls) we exported the its path, to the PATH variable making it possible to run like if it was the original bash command, giving the possibility to run malicious code.
 
 
 
