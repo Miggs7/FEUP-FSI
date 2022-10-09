@@ -118,9 +118,43 @@ int main()
 
 ![Terminal print of task 4](/images/task4.png)
 
-
-
 ### **Task 5 - Environment Variable and Set-UID Programs**
+
+Code given: 
+
+``` c
+int main()
+{
+int i = 0;
+while (environ[i] != NULL) {
+    printf("%s\n", environ[i]);
+    i++;
+  }
+}
+```
+
+**TERMINAL PRINT ON TASK 5**
+
+![Terminal print of task 5](/images/task4.png)
+
+- We created a file called setuid.c, after we compilled we gave permissions to root and exported the following variables: PATH, LD_LIBRARY_PATH, ANY_NAME;
+
+-The output 
+
+### **Task 6 - The PATH Environment Variable and Set-UID Programs**
+
+Code given: 
+
+``` c
+int main()
+{
+  system("ls");
+  return 0;
+}
+```
+
+- We created a file called myls.c, after we compilled to an executable (./ls) we exported the its path, to the PATH variable making it possible to run like if it was the original bash command, giving the possibility the run malicious code.
+
 
 
 
