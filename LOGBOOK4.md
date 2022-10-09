@@ -135,11 +135,11 @@ while (environ[i] != NULL) {
 
 **TERMINAL PRINT ON TASK 5**
 
-![Terminal print of task 5](/images/task4.png)
+![Terminal print of task 5](/images/task5.png)
 
 - We created a file called setuid.c, after we compilled we gave permissions to root and exported the following variables: PATH, LD_LIBRARY_PATH, ANY_NAME;
 
--The output 
+-The output is the same as the env command.
 
 ### **Task 6 - The PATH Environment Variable and Set-UID Programs**
 
