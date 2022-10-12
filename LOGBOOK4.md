@@ -1,9 +1,9 @@
 # **Week #4**
 
-### **SEEDs Lab**
+# **SEEDs Lab**
 Environment Variable and Set-UID Program Lab
 
-### **Task 1 - Manipulating Environment Variables** 
+## **Task 1 - Manipulating Environment Variables** 
 
 - Used printenv/env to print out the environment variables. 
 
@@ -16,7 +16,7 @@ We also used the **printenv PWD** command and got the following output:
 
 ![Terminal print of task 1.1](images/task1.1.png)
 
-### **Task 2 - Passing Environment Variables from Parent Process to Child Process**
+## **Task 2 - Passing Environment Variables from Parent Process to Child Process**
 
 - We compiled the program given **(gcc myprintenv.c -o childprint.out gcc myprintenv.c -o parentprint.out)** into two binaries, each differing on which process would print the environment variables (parent or child)
 
@@ -61,7 +61,7 @@ void main()
 ![Terminal print of task 2](/images/task2.png)
 
 
-### **Task 3 - Environment Variables and execve()**
+## **Task 3 - Environment Variables and execve()**
 
 - In this task we compiled the program given **(myenv.c)** . This program starts another process through **execve** and prints its environment variables. 
 
@@ -93,7 +93,7 @@ int main()
 
 
 
-### **Task 4 - Environment Variables and system()**
+## **Task 4 - Environment Variables and system()**
 
 Code given: 
 
@@ -118,7 +118,7 @@ int main()
 
 ![Terminal print of task 4](/images/task4.png)
 
-### **Task 5 - Environment Variable and Set-UID Programs**
+## **Task 5 - Environment Variable and Set-UID Programs**
 
 Code given: 
 
@@ -141,7 +141,7 @@ while (environ[i] != NULL) {
 
 - The output is the same as the env command.
 
-### **Task 6 - The PATH Environment Variable and Set-UID Programs**
+## **Task 6 - The PATH Environment Variable and Set-UID Programs**
 
 Code given: 
 
@@ -155,6 +155,27 @@ int main()
 
 - We created a file called myls.c, after we compilled to an executable (./ls) we exported the its path, to the PATH variable making it possible to run like if it was the original bash command, giving the possibility to run malicious code.
 
+## **CTF Week 4 **
+
+**Objective: ** Login as an admin on a wordpress server using CVE with a known exploit.
+
+**Target** :  [CTF-FSI] (http://ctf-fsi.fe.up.pt:5001) , only available through the FEUP's VPN.
+
+** Identify valuable information by browsing the web application ** 
 
 
+### ** CVE Search ** 
 
+  | Plugin/Framework | Version | CVE|
+  | :--: | :--: | :--: |
+  | wordpress | 5.8.1 | None has been identified or reported yet |
+  | WooCommer | 5.7.1 |  None has been identified or reported yet |
+  | Booster for WooCommerce | 5.4.3 | Versions up to, and including this one are ** vulnerable to authentication bypass ** . |
+
+  ** Flag 1 ** - flag{[CVE-2021-34646]} (https://www.cvedetails.com/cve/CVE-2021-34646/)
+
+### ** Availabe exploit online **
+
+* [Available exploit](https://www.exploit-db.com/exploits/50299)
+
+### ** Exploit the Vulnerability ** 
