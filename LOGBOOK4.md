@@ -157,14 +157,14 @@ int main()
 
 ## **CTF Week 4 **
 
-**Objective: ** Login as an admin on a wordpress server using CVE with a known exploit.
+**Objective:** Login as an admin on a wordpress server using CVE with a known exploit.
 
 **Target** :  [CTF-FSI] (http://ctf-fsi.fe.up.pt:5001) , only available through the FEUP's VPN.
 
-** Identify valuable information by browsing the web application ** 
+**Identify valuable information by browsing the web application** 
 
 
-### ** CVE Search ** 
+### **CVE Search** 
 
   | Plugin/Framework | Version | CVE|
   | :--: | :--: | :--: |
@@ -172,10 +172,24 @@ int main()
   | WooCommer | 5.7.1 |  None has been identified or reported yet |
   | Booster for WooCommerce | 5.4.3 | Versions up to, and including this one are ** vulnerable to authentication bypass ** . |
 
-  ** Flag 1 ** - flag{[CVE-2021-34646]} (https://www.cvedetails.com/cve/CVE-2021-34646/)
+  **Flag 1** - flag{[CVE-2021-34646]} (https://www.cvedetails.com/cve/CVE-2021-34646/)
 
-### ** Availabe exploit online **
+### **Availabe exploit online**
 
 * [Available exploit](https://www.exploit-db.com/exploits/50299)
 
-### ** Exploit the Vulnerability ** 
+### **Exploit the Vulnerability** 
+
+* Pick a user-ID, [here](http://ctf-fsi.fe.up.pt:5001/wp-json/wp/v2/users/)
+
+* Download and run the script ./50299.py http://ctf-fsi.fe.up.pt:5001/ 1 
+
+* One of the links will let you be logged in as an adminstrator.
+
+* Access the [management page](http://ctf-fsi.fe.up.pt:5001/wp-admin/edit.php)
+
+* Capture the flag
+
+**Flag 2** -  flag{please don't bother me}
+
+
