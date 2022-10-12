@@ -155,7 +155,7 @@ int main()
 
 - We created a file called myls.c, after we compilled to an executable (./ls) we exported the its path, to the PATH variable making it possible to run like if it was the original bash command, giving the possibility to run malicious code.
 
-## **CTF Week 4 **
+## **CTF Week 4**
 
 **Objective:** Login as an admin on a wordpress server using CVE with a known exploit.
 
