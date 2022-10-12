@@ -163,6 +163,8 @@ int main()
 
 **Identify valuable information by browsing the web application** 
 
+![versions](/images/CTF 4/versions.png)
+
 
 ### **CVE Search** 
 
@@ -182,13 +184,23 @@ int main()
 
 * Pick a user-ID, [here](http://ctf-fsi.fe.up.pt:5001/wp-json/wp/v2/users/)
 
+![user-ID](/images/CTF 4/adminID.png)
+
 * Download and run the script ./50299.py http://ctf-fsi.fe.up.pt:5001/ 1 
+
+![script result](/images/CTF 4/exploit.png)
 
 * One of the links will let you be logged in as an adminstrator.
 
+![sucess](/images/CTF 4/hacksucess.png)
+
 * Access the [management page](http://ctf-fsi.fe.up.pt:5001/wp-admin/edit.php)
 
+![management](/images/CTF 4/management.png)
+
 * Capture the flag
+
+![flag](/images/CTF 4/flag.png)
 
 **Flag 2** -  flag{please don't bother me}
 
