@@ -172,7 +172,7 @@ int main()
   | :--: | :--: | :--: |
   | wordpress | 5.8.1 | None has been identified or reported yet |
   | WooCommer | 5.7.1 |  None has been identified or reported yet |
-  | Booster for WooCommerce | 5.4.3 | Versions up to, and including this one are ** vulnerable to authentication bypass ** . |
+  | Booster for WooCommerce | 5.4.3 | Versions up to, and including this one are **vulnerable to authentication bypass** . |
 
   **Flag 1** - flag{[CVE-2021-34646]} (https://www.cvedetails.com/cve/CVE-2021-34646/)
 
