@@ -18,3 +18,12 @@ Buffer Overflow Attack Lab (Set-UID Version)
 
 ### **Task 2: Understanding the Vulnerable Program** 
 
+- Compiled the program using **make**, which ran a makefile already configured to compile the program with the correct flags to enable the attack, such as turning off the StackGuard, and running the commands to make the program Set-UID
+- Checked the permissions of the resulting programs, confirming the Set-UID bit
+
+![Terminal print task2](/images/Logbook5%20images/task2.png)
+
+
+### **Task 3: Launching Attack on 32-bit Program (Level 1)** 
+
+
