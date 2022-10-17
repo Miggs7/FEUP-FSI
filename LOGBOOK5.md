@@ -1,7 +1,8 @@
-**Week #5** 
+# **Week #5** 
 
-### **SEEDs Lab**
-Buffer Overflow Attack Lab (Set-UID Version)
+## **SEEDs Lab**
+
+### Buffer Overflow Attack Lab (Set-UID Version)
 
 - First we turned off the linux countermeasures, such as Address Space Randomization using the command shown on the lab guide, and then configured the /bin/sh so that the shell allows for Set-UID program attacks
 
@@ -75,24 +76,24 @@ with open('badfile', 'wb') as f:
     f.write(content)
 ```
 
-### CTF - Week 5
+# CTF - Week 5
 
 ## Task 1
 
-#Checksec
+### Checksec
  * Architecture is x86 (Arch);
  * There is no canary protecting the return address (Stack);
  * The stack has execution permissions(NX);
  * Binary Positions are not randomized (PIE);
  * The are memory segments with permission to read,write and execute (RWX).
 
-#Program analysis
+### Program analysis
  
  * mem.txt is opened by the program and saved in an array;
  * buffer value is read from input;
  * There is no buffer overflow;
 
-#Program Source Code 
+### Program Source Code 
 
  ```c
 
@@ -130,7 +131,7 @@ int main() {
 
  ```
 
-#Attack
+### Attack
 
 * Cause a buffer overflow on 'buffer' by inputing more than 20 byte (space it has initiliazed);
 * After inputing more than 20 bytes, write that you want the array with name of the file flag.txt;
@@ -138,7 +139,7 @@ int main() {
 
 The described attack is done in the last 3 lines in the Python script.
 
-#Python script
+### Python script
 
 ``` python
 #!/usr/bin/python3
@@ -157,17 +158,25 @@ r.interactive()
 
 ``` 
 
-### Task 2
+### Result 
 
-## Checksec
+![result](/images/CTF%205/Task1Result.png)
+
+** Flag 1 ** - flag{91bd5c3ed28dc428b3ad7af35ce12f43}
+
+# Task 2
+
+### Checksec
    * Checksec will display the same information of the program in the first task;
 
-## Program analysis
+   ![checksec2](/images/CTF%205/Task2Checksec.png)
+
+### Program analysis
     * The program has a new defense, a new buffer between the buffer we overflow and the target
     * It will check if we change its value
  
 
-#Program
+### Program
 
 ```c
 #include <stdio.h>
@@ -205,10 +214,10 @@ int main() {
 }
 ```
 
-#Attack
+### Attack
   * To bypass this all we need to do is input the correct sequence of characters in this new buffer, using the following script:
 
-##Python Script
+### Python Script
   ```python
 
   #!/usr/bin/python3
@@ -236,7 +245,10 @@ r.sendline(teste);
 r.interactive()
 ```
 
-## Result
+### Result
 
+![result2](/images/CTF%205/Task2Result.png)
+
+** Flag 2 ** - flag{0e68e08552b7bfe81eb7f7201d81d023}
 
 
