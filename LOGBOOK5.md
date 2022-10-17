@@ -162,7 +162,7 @@ r.interactive()
 
 ![result](/images/CTF%205/Task1Result.png)
 
-** Flag 1 ** - flag{91bd5c3ed28dc428b3ad7af35ce12f43}
+**Flag 1** - flag{91bd5c3ed28dc428b3ad7af35ce12f43}
 
 # Task 2
 
@@ -249,6 +249,6 @@ r.interactive()
 
 ![result2](/images/CTF%205/Task2Result.png)
 
-** Flag 2 ** - flag{0e68e08552b7bfe81eb7f7201d81d023}
+**Flag 2** - flag{0e68e08552b7bfe81eb7f7201d81d023}
 
 
