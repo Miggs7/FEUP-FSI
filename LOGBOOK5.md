@@ -253,7 +253,39 @@ r.interactive()
 
 ## Extra CTF 
 
+### Program analysis
+
+This program will check if the file "/flags/flag.txt" exists.
+
+### Program
+
+```c
+// main.c
+
+#include <stdio.h>
+#include <unistd.h>
+
+void my_big_congrats(){
+    puts("TODO - Implement this in the near future!");
+}
+
+int main() {
+    puts("I'm going to check if the flag exists!");
+
+    if (access("/flags/flag.txt", F_OK) == 0) {
+        puts("File exists!!");
+        my_big_congrats();
+    } else {
+        puts("File doesn't exist!");
+    }
+
+    return 0;
+
+```
+
 ### Attack
+
+We need to find if the file exists.
 
 * create in /tmp the file printenv with :
     ```console
@@ -264,8 +296,9 @@ r.interactive()
     ```console
         echo PATH="/tmp:$PATH" > env
     ```
+    We need to change the PATH so that we can run our new printenv in /tmp anywhere.
 
-The program will run automatically and if you check last_log in /tmp you will see the flag because the printenv has been replaced with our version.
+The program main.c will run automatically and if you check last_log in /tmp you will see the flag because the printenv has been replaced with our version.
 
 ![Extra_result](/images/CTF%205/Extra/flag.png)
 
