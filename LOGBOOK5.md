@@ -283,6 +283,26 @@ int main() {
 
 ```
 
+### Script analysis
+
+    When there is env program in /tmp, we will run this script and the script will export variables "/usr/bin/cat /tmp/env | /usr/bin/xargs". After that, our printenv will be use to reach the content in the flag
+    
+### Script
+
+    ```console 
+        #!/bin/bash
+
+        if [ -f "/tmp/env" ]; then
+        echo "Sourcing env"
+        export $(/usr/bin/cat /tmp/env | /usr/bin/xargs)
+        rm /tmp/env
+        fi
+
+        printenv
+        exec /home/flag_reader/reader
+    ```
+
+
 ### Attack
 
 We need to find if the file exists.
@@ -298,7 +318,12 @@ We need to find if the file exists.
     ```
     We need to change the PATH so that we can run our new printenv in /tmp anywhere.
 
-The program main.c will run automatically and if you check last_log in /tmp you will see the flag because the printenv has been replaced with our version.
+The script my_script.sh will run automatically because of the script in /etc/cron.d, you can check last_log in /tmp you will see the flag because the printenv has been replaced with our version.
+
+```console
+    PATH=/bin:/usr/bin:/usr/local/bin
+    * * * * * flag_reader /bin/bash -c "/home/flag_reader/my_script.sh > /tmp/last_log"
+```
 
 ![Extra_result](/images/CTF%205/Extra/flag.png)
 
