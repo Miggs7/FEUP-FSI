@@ -39,7 +39,7 @@ Then, changed the variables in the python script. This script will output to a f
 
 - Changed the offset to 112, which is the distance between the start of the buffer and the return address that we want to rewrite (ebp - buffer) + 4bits = 108 + 4 = 112 
 
-- Changed the ret value to the address to which we want the program to jump to. Ret values equals to 0xFFFFD126 because we know that the buffer starts at 0xffffcb0c and the size is 517. The shellcode is placed 27 bytes before the end of the buffer, so at position 490. To get that position we have to add 0xffffcb0c plus 490 and we get 0xFFFFD126 that is the return adress
+- Changed the ret value to the address to which we want the program to jump to. Ret values equals to 0xFFFFD126 because we know that the buffer starts at 0xffffcb0c and the size is 517. The shellcode is placed 27 bytes before the end of the buffer, so at position 490. To get that position we have to add 0xffffcb0c plus 490 that gives the ret value already mentioned, that is the return adress.
 
 - Changed the start value to match the start of the shellcode in the buffer with the position the program is going to jump to
 
