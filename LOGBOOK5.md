@@ -14,7 +14,7 @@
 - Compiled and ran the program 
 - Both 32-bit and 64-bit versions granted us access to the shell
 
-![Terminal print task1](/images/Logbook5%20images/newtask1.png)
+![Terminal print task1](/images/Logbook5%20images/realtask1.png)
 
 
 ### **Task 2: Understanding the Vulnerable Program** 
@@ -22,24 +22,24 @@
 - Compiled the program using **make**, which ran a makefile already configured to compile the program with the correct flags to enable the attack, such as turning off the StackGuard, and running the commands to make the program Set-UID
 - Checked the permissions of the resulting programs, confirming the Set-UID bit
 
-![Terminal print task2](/images/Logbook5%20images/newtask2.png)
+![Terminal print task2](/images/Logbook5%20images/realtask2.png)
 
 
 ### **Task 3: Launching Attack on 32-bit Program (Level 1)** 
 
 - First ran the debug version of the program to understand the locations of each variable in the Stack. We used a break point in the function where the overflow is possible to analyze the addresses at that point in the program execution
 
-![Terminal print task3](/images/Logbook5%20images/task3_1.png)
+![Terminal print task3](/images/Logbook5%20images/realtask3_1.png)
 
-![Terminal print task3](/images/Logbook5%20images/task3_2.png)
+![Terminal print task3](/images/Logbook5%20images/realtask3_2.png)
 
-![Terminal print task3](/images/Logbook5%20images/task3_3.png)
+![Terminal print task3](/images/Logbook5%20images/realtask3_3.png)
 
 Then, changed the variables in the python script. This script will output to a file the contents to be written on the buffer to overflow
 
 - Changed the offset to 112, which is the distance between the start of the buffer and the return address that we want to rewrite (ebp - buffer) + 4bits = 108 + 4 = 112 
 
-- Changed the ret value to the address to which we want the program to jump to. Ret values equals to 0xFFFFD126 because we know that the buffer starts at 0xffffcb0c and the size is 517. The shellcode is placed 27 bytes before the end of the buffer, so at position 490. To get that position we have to add 0xffffcb0c plus 490 that gives the ret value already mentioned, that is the return adress.
+- Changed the ret value to the address to which we want the program to jump to. Ret values equals to 0xFFFFCCF6 because we know that the buffer starts at 0xffffcb0c and the size is 517. The shellcode is placed 27 bytes before the end of the buffer, so at position 490. To get that position we have to add 0xffffcb0c plus 490 that gives the ret value already mentioned, that is the return adress.
 
 - Changed the start value to match the start of the shellcode in the buffer with the position the program is going to jump to
 
@@ -66,7 +66,7 @@ content[start:start + len(shellcode)] = shellcode
 
 # Decide the return address value 
 # and put it somewhere in the payload
-ret    = 0xFFFFD126           # Change this number 
+ret    = 0xFFFFCCF6           # Change this number 
 offset = 112              # Change this number 
 
 L = 4     # Use 4 for 32-bit address and 8 for 64-bit address
@@ -80,7 +80,7 @@ with open('badfile', 'wb') as f:
 To run the explot:
 - We open the terminal in the diretory where exploit.py and stack-L1 are located. Then we tun exploit.py that creates the badfile, this file is the one to be used to exploit. After that, we run stack-L1 that gives us the rootshell.
 
-![Terminal print task3](/images/Logbook5%20images/task3_4.png)
+![Terminal print task3](/images/Logbook5%20images/realtask3_4.png)
 
 # CTF - Week 5
 
