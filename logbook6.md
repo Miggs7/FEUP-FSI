@@ -109,3 +109,5 @@ with open('badfile', 'wb') as f:
 * If we compare, this output with the one we did before we see that the message with the smilley faces wasn't printed meaning that the format program might have crashed.
 
 ## **Task 2**
+
+---
