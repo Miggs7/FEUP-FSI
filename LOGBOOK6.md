@@ -329,7 +329,7 @@ with open('badfile', 'wb') as f:
 
 With the following script we accomplished the task successfully:
 
-```
+```python
 #!/usr/bin/python3
 import sys
 
