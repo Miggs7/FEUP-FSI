@@ -317,3 +317,22 @@ with open('badfile', 'wb') as f:
 ![Task3res](images/logbook6/task3Ares.png)
 
 * Due to the fact that we sent a "%n" into the bytearray, the target's value will be changed.
+
+
+### **Task 3B** - Change the value to 0x5000
+
+* Now we can write on the target, and all we needed was to insert the correct amount of characters in the string, in order to make the number of characters before the %n value, equal to 0x5000.
+
+* After converting that value a decimal number, we realized we had to have 20480 characters before the n.
+
+* So to print 0x5000 (20480), we need each %x call to have a precision of 325 (20480 / 63 = 325.079) characters. With this precision we will miss the 20480 value by 1 (325 * 63 + 4 (4 initial bytes of the string) = 20479). This way, we added an extra character a before the %n call.
+
+With the following script we accomplished the task successfully:
+
+```
+s = "\x68\x50\x0e\x08" + "%325x" * 63  + "a%n\n"
+
+The target variable's value (after):  0x00005000
+```
+
+
