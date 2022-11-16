@@ -140,4 +140,38 @@ Check it out here: https://www.php.net/manual/en/mysqli.quickstart.multiple-stat
 
 
 
+## Task 3.1 -  SQL Injection Attack on UPDATE Statement - Update Salary
+
+Here, we used the same username way as used on the 2.1 exercise, instead we used Alice' -- ' to gain acess to Alice's account, 
+then we went to "Edit profile", and typed on the nickname field the current info: 
+
+
+
+
+## Task 3.2 - 
+
+
+
+
+
+
+# CTF Write-UP 
+
+## Challenge 1 
+
+Entering the easyvault website, with a login page, we were told that we need to log in as a admin username 
+
+So we used the same method as described on the seed labs, using the following information: 
+
+```
+username: admin' -- 
+password: c  (can use any character)
+```
+
+Once again, by using this username we are commenting the password part of the querie with the  -- symbols.
+We are requested still to enter something on the password field due to frontend requeriments but it wont be subjected to any validation. 
+
+
+## Challenge 2 
+
 
