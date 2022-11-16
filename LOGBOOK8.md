@@ -111,4 +111,33 @@ all. Therefore the navbar tag starts before the php tag but it end within the ph
 For this task, we need to try to run two SQL statements by exploiting the vulnerabilities in the previous tasks. we can try to login as admin and add another user in the same input by trying the following:
 
 
+![Terminal print task2.3](/images/Logbook%208%20images/task2.3errorsql.png)
+
+We are not able to do it this way, due to this sql statement error.
+
+A few hours later, right when we were this close of jumping into a cliff, we inspected the source code of the website we came across this code:
+
+```
+// create a connection
+$conn = getDB();
+// Sql query to authenticate the user
+$sql = "SELECT id, name, eid, salary, birth, ssn, phoneNumber, address, email,nickname,Password
+FROM credential
+WHERE name= '$input_uname' and Password='$hashed_pwd'";
+if (!$result = $conn->query($sql)) {
+  echo "</div>";
+  echo "</nav>";
+  echo "<div class='container text-center'>";
+  die('There was an error running the query [' . $conn->error . ']\n');
+  echo "</div>";
+}
+
+```
+
+We noticed that the bright mind who wrote the website, used the query() function, and we found that its not possible to use multiple queries with a querie() function, it would be necessary to use the multi_querie() function instead.
+
+Check it out here: https://www.php.net/manual/en/mysqli.quickstart.multiple-statement.php
+
+
+
 
