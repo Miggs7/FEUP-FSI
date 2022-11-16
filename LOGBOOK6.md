@@ -388,4 +388,10 @@ with open('badfile', 'wb') as f:
 
 ![result3B](images/logbook6/result.png)
 
+# CTF Write-UP 
+
+## Challenge 1 
+
+This first CTF challenge could be solved obtaining the adress of the global variable flag, and use an exploit template string to read the flag value.
+
 
