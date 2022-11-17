@@ -1,6 +1,6 @@
 ## Week 8 - SQL INJECTION ATTACK LAB
 
-### Task 1  - Get familiar with SQL statements
+## Task 1  - Get familiar with SQL statements
 
 Following the lab guide, first we followed the rules of setting up an lab environment with docker commands. 
 After getting the container id, we were able to run mysql querie to obtain information about the credential tables by using the following sql command: 
@@ -146,17 +146,29 @@ We noticed that the bright mind who wrote the website, used the query() function
 
 Check it out here: https://www.php.net/manual/en/mysqli.quickstart.multiple-statement.php
 
-
+## Task 3 - SQL Injection Attack on UPDATE Statement
 
 ## Task 3.1 -  SQL Injection Attack on UPDATE Statement - Update Salary
 
 Here, we used the same username way as used on the 2.1 exercise, instead we used Alice' -- ' to gain acess to Alice's account, 
 then we went to "Edit profile", and typed on the nickname field the current info: 
 
+  ![Terminal print acessAliceinformation](/images/Logbook%208%20images/acessAliceinformation.png)
+
+  ![Terminal print AliceInformation](/images/Logbook%208%20images/AliceInformation.png)
+
+Alice thinks that she deserves a raise, so we want to help her. After acessing Alice profile, we can edit the information found in the profile. So let´s say that her new salary is now 30000. To accomplish this, just do as we did in task 2.1 but instead of an authentication, we will uptade her salary. In the field "NickName" we will write "Alice', salary='30000", this will change Alice´s salary to 30000 while setting Alice´s nickname to "Alice".
+
+  ![Terminal print realsalaryupdate](images/Logbook%208%20images/realsalaryupdate.png)
+
+  ![Terminal print realAliceInformation](images/Logbook%208%20images/realAliceInformation.png)
 
 
 
-## Task 3.2 - 
+
+## Task 3.2 - Modify other people’ salary
+
+Alice was still not done. After raising her salary, she wants to reduce her boss's salary, called Boby.
 
 
 
