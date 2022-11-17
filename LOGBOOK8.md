@@ -168,7 +168,12 @@ Alice thinks that she deserves a raise, so we want to help her. After acessing A
 
 ## Task 3.2 - Modify other people’ salary
 
-Alice was still not done. After raising her salary, she wants to reduce her boss's salary, called Boby.
+Alice was still not done. After raising her salary, she wants to reduce her boss's salary, called Boby. Not a very good employee?
+This time around it is a little different. We start by, again, going to Alice's profile editor. In the field "NickName" we will write "', salary = 1 WHERE name = 'Boby';#", this will change Boby´s salary to 1 while making is "NickName" empty.
+
+  ![Terminal print Bobysalaryupdate](images/Logbook%208%20images/Bobysalaryupdate.png)
+
+  ![Terminal print BobynewSalary](images/Logbook%208%20images/BobynewSalary.png)
 
 
 
