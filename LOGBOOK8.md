@@ -106,6 +106,14 @@ all. Therefore the navbar tag starts before the php tag but it end within the ph
 
   ```
 
+  Then with this link:
+
+  ![Terminal print linktoacesssite](/images/Logbook%208%20images/linktoacesssite.png)
+
+  We can authenticate in the website as the Admin.
+
+  ![Terminal print imagem_2022-11-17_154655081](/images/Logbook%208%20images/imagem_2022-11-17_154655081.png)
+
 ## Task 2.3 - Append a new SQL statement 
 
 For this task, we need to try to run two SQL statements by exploiting the vulnerabilities in the previous tasks. we can try to login as admin and add another user in the same input by trying the following:
