@@ -10,5 +10,10 @@ typed the following code on the text box:
 ![ctf](/images/logbook10/ctf1.png)
 
 When the admin goes to evaluate the request, the script will click the button, and as it will be enabled, the flag will be given to us.
+We used "giveflag" on the script because if we inspect the text box we get this id.
+
+![ctf11](/images/ctf12.png)
+
+Then, after waiting for a while, we got the flag 
 
 ![ctf1](/images/logbook10/ctf11.png)
