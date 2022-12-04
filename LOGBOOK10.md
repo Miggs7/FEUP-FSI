@@ -1,3 +1,15 @@
+## Week 10 - Cross-Site Scripting Lab
+
+## Task 1 - Posting a Malicious Message to Display an Alert Window
+
+For this handout, we have to start by embeding a JavaScript program in our Elgg profile, such that when another
+user views our profile, the JavaScript program will be executed and an alert window will be displayed. The JavaScript program that will display is:
+
+![Terminal print javascriptcode](/images/logbook10/javascriptcode.png)
+
+Embeding that code to the brief description field of, for example, Alice´s profile. We get this pop-up:
+
+![Terminal print Xsspop_up](/images/logbook10/Xsspop_up.png)
 
 ## CTF Challenges
 
