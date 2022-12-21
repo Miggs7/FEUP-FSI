@@ -1,3 +1,275 @@
-## Public-Key Infrastructure (PKI) Lab 
+# SEED labs - PKI 
 
-### TASK 1 
+## Setup
+
+After building the composer image you need to run 'docker-compose up' or its alias 'dcup' to have the container running in the background.
+
+![dcup](images/logbook11/dcup.png)
+
+List of container ID's:
+
+![dockps](images/logbook11/dockps.png)
+
+Using 'docksh' and the first few characters of the container ID will give you access to the shell of the container.
+
+![docksh](images/logbook11/docksh.png)
+
+We need to set up a HTTPS web server with a name, so we add the following entries to 'etc/hosts'
+
+```shell
+10.9.0.80 www.bank32.com
+10.9.0.80 www.fsi2022.com
+```
+## Task 1 - Becoming a Certificate Authority (CA)
+
+We need to change openssl configuration, so we will copy the configuration file to our current directory and instruct OpenSSL to use this copy
+
+```
+cp  /usr/lib/ssl/openssl.cnf .
+```
+Uncommented 'unique_subject' parameter, just like requested.
+
+![task1_2](images/logbook11/task1_2.png)
+
+
+We generate a CA with the following command
+
+```
+openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 \
+-keyout ca.key -out ca.crt
+```
+
+After we fill the asked information the output of the command will be stored in two files: ca.key and ca.crt.
+
+The ca.key contains the private key, while ca.crt contains the public-key certificate.
+
+![ca.crt](images/logbook11/ca_crt.png)
+
+### Questions
+
+1. What part of the certificate indicates this is a CA’s certificate?
+
+    Basic Constrainst, flag identifying certificate is CA.
+
+![basic_constraints](images/logbook11/task1_q1.png)
+
+1. What part of the certificate indicates this is a self-signed certificate?
+
+    Issuer and subject of the certificate are equal.
+
+![issuer_subject](images/logbook11/task1_q2.png)
+
+1. In the RSA algorithm, we have a public exponent e, a private exponent d, a modulus n, and two secret numbers p and q, such that n = pq. Please identify the values for these elements in your certificate and key files.
+
+* Modulus
+
+![modulus](images/logbook11/task1_modulus.png)
+
+* Exponents
+
+![exponenets](images/logbook11/task1_exp.png)
+
+* Primes
+
+![primes](images/logbook11/task1_primes.png)
+
+
+Observation: Answers for question 1 and 2 come from the ouput of the following command:
+```
+openssl x509 -in ca.crt -text -noout
+```
+
+And question 3 comes from this command:
+
+```
+openssl rsa -in ca.key -text -noout
+```
+
+## Task 2: Generating a Certificate Request for Your Web Server
+
+We want to generate a CSR for www.fsi2022.com, to give it a public-key certificate from our CA. <br>
+The CSR will be sent to the CA, who will
+verify the identity information in the request, and then generate a certificate.
+
+The following command will generate a CSR for www.fsi2022.com
+
+```
+openssl req -newkey rsa:2048 -sha256 \
+-keyout server.key -out server.csr \
+-subj "/CN=www.fsi2022.com/O=fsi2022 Inc./C=PT" \
+-passout pass:dees -addext "subjectAltName = DNS:www.fsi2022.com, \
+                          DNS:www.fsi2022A.com, \
+                          DNS:www.fsi2022B.com"
+```
+
+![task2_1](images/logbook11/task2_1.png)
+
+The command will generate a pair of public/private key then create a signing request from the public key.
+
+The following command will look at the decoded content of the CSR and private key files:
+
+```
+openssl req -in server.csr -text -noout
+openssl rsa -in server.key -text -noout
+```
+### Add alternative names
+Adding the following option to the CSR generator command we will add alternative names to my certifcate signing request: 
+````
+-addext "subjectAltName = DNS:www.fsi2022.com, \
+                          DNS:www.fsi2022A.com, \
+                          DNS:www.fsi2022B.com"
+````
+
+![task2_2_1](images/logbook11/task2_1_2.png)
+
+## Task 3
+
+Now, we can turn the CSR created previously into a certficate 'server.crt', using the CA's 'ca.crt' and 'ca.key' by running the following command:
+
+```
+openssl ca -config myCA_openssl.cnf -policy policy_anything \
+-md sha256 -days 3650 \
+-in server.csr -out server.crt -batch \
+-cert ca.crt -keyfile ca.key
+```
+
+The above command :
+
+* 'myCA_openssl.cnf' is the configuration file we copied from /usr/lib/
+ssl/openssl.cnf and made some changes in task 1
+* The default setting in 'myCA_openssl.cnf' does not allow 'openssl ca' so we need to enable that by uncommenting the following line:
+
+```
+# Extension copying option: use with caution.
+copy_extensions = copy
+```
+After editing 'myCA_openssl.cnf' we transform the CSR into a certificate
+
+![task3](images/logbook11/task3done.png)
+
+## Task 4 - Deploying Certificate in an Apache-Based HTTPS Website
+
+We will deployed our certicate into an apache-based HTTPS based website, hosted in a docker container:
+    
+* Configure 'bank32_apache_ssl.conf' so that it corresponds to our server's data and mover server.crt and server.key to the right path.
+```
+<VirtualHost *:443> 
+    DocumentRoot /var/www/bank32
+    ServerName www.fsi2022.com
+    ServerAlias www.fsi2022A.com
+    ServerAlias www.fsi2022B.com
+    DirectoryIndex index.html
+    SSLEngine On 
+    SSLCertificateFile /certs/server.crt
+    SSLCertificateKeyFile /certs/server.key
+</VirtualHost>
+
+<VirtualHost *:80> 
+    DocumentRoot /var/www/bank32
+    ServerName www.fsi2022.com
+    DirectoryIndex index_red.html
+</VirtualHost>
+
+# Set the following gloal entry to suppress an annoying warning message
+ServerName localhost
+
+# Set the following gloal entry to suppress an annoying warning message
+ServerName localhost
+```
+* Build and Launch the docker container
+![container_build](images/logbook11/task4_dcbuild.png)
+![container](images/logbook11/task4_dcup.png)
+
+After acessing container root (like in the setup section of this logbook) you copy certificate and key from the volumes directory
+```
+root@cf2ba8dc58e9:/certs# cp /volumes/server.crt .
+root@cf2ba8dc58e9:/certs# cp /volumes/server.key .
+```
+
+* Enable the SSL module and the sites described in this file with following commands when the container is built:
+
+```
+# a2enmod ssl // Enable the SSL module
+# a2ensite bank32_apache_ssl // Enable the sites described in this file
+```
+
+* Start the apache server with the following commands in the container:
+
+```
+// Start the server
+# service apache2 start
+```
+![apache_start](images/logbook11/task4_apache_start.png)
+
+If we go to the browser and go the URL 'https://www.fsi2022.com/' we will see a warning instead of the 'Hello, world!' page, this is due to the fact that our browser in this case Firefox doesn't know the Issuer.
+
+![issuer](images/logbook11/task4_issuer.png)
+
+After we load the certicate into Firefox (file 'ca.crt', which is public-key certificate) we will be able to visit the desired webpage and Firefox will recognize it as safe.
+
+![import_CA](images/logbook11/task4_importCA.png)
+
+![website](images/logbook11/task4_browser.png)
+
+The certificate will be the one we created before as you can see here in this screenshot.
+
+![certificate](images/logbook11/task4_certificate.png)
+
+
+# Task 5 - Launching a Man-In-The-Middle Attack
+
+We want to prove how strong is PKI against MITM attacks, so we will setup a malicious website 'www.example.com' to impersonate 'www.fsi2022.com'.
+
+First we change the servername to 'www.example.com' in the bank32_apache_ssl file, like this:
+```
+<VirtualHost *:443> 
+    DocumentRoot /var/www/bank32
+    ServerName www.example.com
+    ServerAlias www.fsi2022A.com
+    ServerAlias www.fsi2022B.com
+    DirectoryIndex index.html
+    SSLEngine On 
+    SSLCertificateFile /certs/server.crt
+    SSLCertificateKeyFile /certs/server.key
+</VirtualHost>
+
+<VirtualHost *:80> 
+    DocumentRoot /var/www/bank32
+    ServerName www.fsi2022.com
+    DirectoryIndex index_red.html
+</VirtualHost>
+
+# Set the following gloal entry to suppress an annoying warning message
+ServerName localhost
+```
+Then we modify the victims machine's '/etc/hosts' file to emulate the result of a DNS cache positing attack my mapping the hostname 'www.example.com' to our 'malicious web server'.
+
+When we visit the page with URL 'https://example.com' we will see the following:
+
+![Man_in_the_Middle](images/logbook11/task5_MITM.png)
+
+This is due to the fact that the 'www.example.com' does not match any of the names in the CA, proving the efficiency of the use of PKI infrastructure against Man-In-The-Middle Attacks. 
+
+# Task 6 - Launching a Man-In-The-Middle Attack with a Compromised CA
+
+In this task we will demonstrate how is performed a sucessful MITHM attack.
+
+We proved in the previous task that if the CA isn't made for the 'https://example.com', the browser will give an alert making the attack harder to be sucessful since the user is already aware of the danger.
+
+In our experience, we will assume that the attacker stole the CA's private key.
+
+So we will be able to generate the certificate for our scam website 'www.example.com' to do this we have to use the command in Task 2 but specifying for 'www.example.com' :
+
+```
+openssl req -newkey rsa:2048 -sha256 -keyout server.key -out server.csr -subj "/CN=www.example.com/O=Example Inc./C=PT" -passout pass:dees
+```
+
+And then sign our CA with the following command:
+
+```
+openssl ca -config myCA_openssl.cnf -policy policy_anything \
+-md sha256 -days 3650 \
+-in server.csr -out server.crt -batch \
+-cert ca.crt -keyfile ca.key
+```
+
