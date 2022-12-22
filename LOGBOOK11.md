@@ -177,8 +177,7 @@ ServerName localhost
 ServerName localhost
 ```
 * Build and Launch the docker container
-![container_build](images/logbook11/task4_dcbuild.png)
-![container](images/logbook11/task4_dcup.png)
+![Terminal print 1](images/logbook11/1.png)
 
 After acessing container root (like in the setup section of this logbook) you copy certificate and key from the volumes directory
 ```
@@ -244,7 +243,7 @@ ServerName localhost
 ```
 Then we modify the victims machine's '/etc/hosts' file to emulate the result of a DNS cache positing attack my mapping the hostname 'www.example.com' to our 'malicious web server'.
 
-![adding_host](/images/logbook11/task5_1.png)
+![Terminal print task5_1](/images/logbook11/task5_1.png)
 
 When we visit the page with URL 'https://example.com' we will see the following:
 
@@ -288,7 +287,7 @@ So we will be able to generate the certificate for our scam website 'www.example
 ```
 openssl req -newkey rsa:2048 -sha256 -keyout server.key -out server.csr -subj "/CN=www.example.com/O=Example Inc./C=PT" -passout pass:dees
 ```
-![task6_1](/images/logbook11/task6_1.png)
+![Terminal print task6_1](/images/logbook11/task6_1.png)
 
 And then sign our CA with the following command:
 
@@ -299,11 +298,11 @@ openssl ca -config myCA_openssl.cnf -policy policy_anything \
 -cert ca.crt -keyfile ca.key
 ```
 
-![task6_1](/images/logbook11/task6_2.png)
+![Terminal print task6_2](/images/logbook11/task6_2.png)
 
 After that we will send the certs to the Docker and reload the apache server.
 
-![task6_3](/images/logbook11/task6_sucess.png)
+![Terminal print task6_3](/images/logbook11/task6_sucess.png)
 
 
 This time we will be able to visit the web page because the CA was compromised and an attacker can sign the certicate and impersonate a website.
