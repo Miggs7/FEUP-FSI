@@ -254,10 +254,33 @@ This is due to the fact that the 'www.example.com' does not match any of the nam
 
 In this task we will demonstrate how is performed a sucessful MITHM attack.
 
+First we change our apache configuration so that we can acess "example.com":
+
+```
+<VirtualHost *:443> 
+    DocumentRoot /var/www/bank32
+    ServerName www.example.com
+    ServerAlias www.fsi2022A.com
+    ServerAlias www.fsi2022B.com
+    DirectoryIndex index.html
+    SSLEngine On 
+    SSLCertificateFile /certs/server2.crt
+    SSLCertificateKeyFile /certs/server2.key
+</VirtualHost>
+
+<VirtualHost *:80> 
+    DocumentRoot /var/www/bank32
+    ServerName www.example.com
+    DirectoryIndex index_red.html
+</VirtualHost>
+
+# Set the following gloal entry to suppress an annoying warning message
+ServerName localhost
+
+```
 We proved in the previous task that if the CA isn't made for the 'https://example.com', the browser will give an alert making the attack harder to be sucessful since the user is already aware of the danger.
 
 In our experience, we will assume that the attacker stole the CA's private key.
-
 So we will be able to generate the certificate for our scam website 'www.example.com' to do this we have to use the command in Task 2 but specifying for 'www.example.com' :
 
 ```
@@ -272,6 +295,12 @@ openssl ca -config myCA_openssl.cnf -policy policy_anything \
 -in server.csr -out server.crt -batch \
 -cert ca.crt -keyfile ca.key
 ```
+
+After that we will send the certs to the Docker and reload the apache server.
+
+This time we will be able to visit the web page because the CA was compromised and an attacker can sign the certicate and impersonate a website.
+
+
 ## CTF Challenges
 
 ## Challenge 1
