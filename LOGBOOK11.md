@@ -102,7 +102,7 @@ openssl req -newkey rsa:2048 -sha256 \
                           DNS:www.fsi2022B.com"
 ```
 
-![task2_1](images/logbook11/task2.png)
+![Terminal print task2](images/logbook11/task2.png)
 
 The command will generate a pair of public/private key then create a signing request from the public key.
 
