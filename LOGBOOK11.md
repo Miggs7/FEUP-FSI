@@ -4,15 +4,15 @@
 
 After building the composer image you need to run 'docker-compose up' or its alias 'dcup' to have the container running in the background.
 
-![dcup](images/logbook11/dcup.png)
+![dcup](images/logbook11/1.png)
 
 List of container ID's:
 
-![dockps](images/logbook11/dockps.png)
+![dockps](images/logbook11/2.png)
 
 Using 'docksh' and the first few characters of the container ID will give you access to the shell of the container.
 
-![docksh](images/logbook11/docksh.png)
+![docksh](images/logbook11/3.png)
 
 We need to set up a HTTPS web server with a name, so we add the following entries to 'etc/hosts'
 
@@ -29,7 +29,7 @@ cp  /usr/lib/ssl/openssl.cnf .
 ```
 Uncommented 'unique_subject' parameter, just like requested.
 
-![task1_2](images/logbook11/task1_2.png)
+![task1_2](images/logbook11/4.png)
 
 
 We generate a CA with the following command
@@ -43,7 +43,7 @@ After we fill the asked information the output of the command will be stored in 
 
 The ca.key contains the private key, while ca.crt contains the public-key certificate.
 
-![ca.crt](images/logbook11/ca_crt.png)
+![ca.crt](images/logbook11/5.png)
 
 ### Questions
 
@@ -51,27 +51,27 @@ The ca.key contains the private key, while ca.crt contains the public-key certif
 
     Basic Constrainst, flag identifying certificate is CA.
 
-![basic_constraints](images/logbook11/task1_q1.png)
+![basic_constraints](images/logbook11/6.png)
 
 1. What part of the certificate indicates this is a self-signed certificate?
 
     Issuer and subject of the certificate are equal.
 
-![issuer_subject](images/logbook11/task1_q2.png)
+![issuer_subject](images/logbook11/7.png)
 
 1. In the RSA algorithm, we have a public exponent e, a private exponent d, a modulus n, and two secret numbers p and q, such that n = pq. Please identify the values for these elements in your certificate and key files.
 
 * Modulus
 
-![modulus](images/logbook11/task1_modulus.png)
+![modulus](images/logbook11/8.png)
 
 * Exponents
 
-![exponenets](images/logbook11/task1_exp.png)
+![exponenets](images/logbook11/9.png)
 
 * Primes
 
-![primes](images/logbook11/task1_primes.png)
+![primes](images/logbook11/10.png)
 
 
 Observation: Answers for question 1 and 2 come from the ouput of the following command:
@@ -102,7 +102,7 @@ openssl req -newkey rsa:2048 -sha256 \
                           DNS:www.fsi2022B.com"
 ```
 
-![task2_1](images/logbook11/task2_1.png)
+![task2_1](images/logbook11/task2.png)
 
 The command will generate a pair of public/private key then create a signing request from the public key.
 
@@ -145,7 +145,7 @@ copy_extensions = copy
 ```
 After editing 'myCA_openssl.cnf' we transform the CSR into a certificate
 
-![task3](images/logbook11/task3done.png)
+![task3](images/logbook11/task3.png)
 
 ## Task 4 - Deploying Certificate in an Apache-Based HTTPS Website
 
@@ -199,21 +199,21 @@ root@cf2ba8dc58e9:/certs# cp /volumes/server.key .
 // Start the server
 # service apache2 start
 ```
-![apache_start](images/logbook11/task4_apache_start.png)
+![apache_start](images/logbook11/apachestart.png)
 
 If we go to the browser and go the URL 'https://www.fsi2022.com/' we will see a warning instead of the 'Hello, world!' page, this is due to the fact that our browser in this case Firefox doesn't know the Issuer.
 
-![issuer](images/logbook11/task4_issuer.png)
+![issuer](images/logbook11/task4_1.png)
 
 After we load the certicate into Firefox (file 'ca.crt', which is public-key certificate) we will be able to visit the desired webpage and Firefox will recognize it as safe.
 
-![import_CA](images/logbook11/task4_importCA.png)
+![import_CA](images/logbook11/task4_2.png)
 
-![website](images/logbook11/task4_browser.png)
+![website](images/logbook11/task4_3.png)
 
 The certificate will be the one we created before as you can see here in this screenshot.
 
-![certificate](images/logbook11/task4_certificate.png)
+![certificate](images/logbook11/task4_4.png)
 
 
 # Task 5 - Launching a Man-In-The-Middle Attack
@@ -244,9 +244,11 @@ ServerName localhost
 ```
 Then we modify the victims machine's '/etc/hosts' file to emulate the result of a DNS cache positing attack my mapping the hostname 'www.example.com' to our 'malicious web server'.
 
+![adding_host](/images/logbook11/task5_1.png)
+
 When we visit the page with URL 'https://example.com' we will see the following:
 
-![Man_in_the_Middle](images/logbook11/task5_MITM.png)
+![Man_in_the_Middle](images/logbook11/task5_2.png)
 
 This is due to the fact that the 'www.example.com' does not match any of the names in the CA, proving the efficiency of the use of PKI infrastructure against Man-In-The-Middle Attacks. 
 
@@ -286,6 +288,7 @@ So we will be able to generate the certificate for our scam website 'www.example
 ```
 openssl req -newkey rsa:2048 -sha256 -keyout server.key -out server.csr -subj "/CN=www.example.com/O=Example Inc./C=PT" -passout pass:dees
 ```
+![task6_1](/images/logbook11/task6_1.png)
 
 And then sign our CA with the following command:
 
@@ -296,7 +299,12 @@ openssl ca -config myCA_openssl.cnf -policy policy_anything \
 -cert ca.crt -keyfile ca.key
 ```
 
+![task6_1](/images/logbook11/task6_2.png)
+
 After that we will send the certs to the Docker and reload the apache server.
+
+![task6_3](/images/logbook11/task6_sucess.png)
+
 
 This time we will be able to visit the web page because the CA was compromised and an attacker can sign the certicate and impersonate a website.
 
