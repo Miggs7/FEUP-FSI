@@ -272,4 +272,43 @@ openssl ca -config myCA_openssl.cnf -policy policy_anything \
 -in server.csr -out server.crt -batch \
 -cert ca.crt -keyfile ca.key
 ```
+#CTF Challenges
 
+#Challenge 1
+
+For this challenge, we want to decypher some messages. To start we need to find the signal. In this challenge we can find it by using the command "nc ctf-fsi.fe.up.pt 6000" that gets us: "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022f9284cc3e7fd3e1024b88ca52b463943c1acbe4a69b6be3c9009c47fbfd62c3c3ccb45b2bcbcba6571a47cf1abc9552b9792bf4b46a6736196dc3140863ed4311e5250031dcf1192f5c35b9b403f384de31a79c3da7c2fbcfb31eca13b446ce6529ee964879615066affce3d6568d65fce999ee6e9d8ee4b23dcf1210ba258
+"
+
+Then, we write this encrypted signal on the variable enc_flag with b before the encrypted signal.
+The e variable from the template is in binary and switching to decimal equals 65537.
+The variable n is equal to the multiplication between p and q, which are two random large prime numbers while d is the private key as the inverse of e given private total.
+```
+from binascii import hexlify, unhexlify
+from sympy import *
+
+p = nextprime(2512)
+q = nextprime(2513)
+n = p*q
+total = (p-1)*(q-1)
+e = 65537
+d = pow(e, -1, total)
+
+
+enc_flag = b"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022f9284cc3e7fd3e1024b88ca52b463943c1acbe4a69b6be3c9009c47fbfd62c3c3ccb45b2bcbcba6571a47cf1abc9552b9792bf4b46a6736196dc3140863ed4311e5250031dcf1192f5c35b9b403f384de31a79c3da7c2fbcfb31eca13b446ce6529ee964879615066affce3d6568d65fce999ee6e9d8ee4b23dcf1210ba258"
+
+def enc(x):
+    int_x = int.from_bytes(x, "big")
+    y = pow(int_x,e,n)
+    return hexlify(y.to_bytes(256, 'big'))
+
+def dec(y):
+    int_y = int.from_bytes(unhexlify(y), "big")
+    x = pow(int_y,d,n)
+    return x.to_bytes(256, 'big')
+
+y = dec(enc_flag)
+print(y.decode())
+```
+After we run the script with the changes done, we get the flag.
+
+![Terminal print flag](/images/CTFs12/flag.png)
