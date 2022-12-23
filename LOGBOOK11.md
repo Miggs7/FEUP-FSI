@@ -392,7 +392,7 @@ print(M.to_bytes(256,'big').decode())
 ![flag2](/images/logbook11/flag2.png)
 
 In RSA to encrypt a message we do ```C = (M^e) mod n```, where ```C``` is the encrypted message, ```M``` the original message, ```e``` the public exponent and ```n``` the modules. We have ```C1=(M^e1) mod n``` and ```C2=(M^e2) mod n```.
-If ```e1``` and ```e2``` are prime numbers, then ```mdc(e1,e2) = 1```, meaning the will be at least one ```a``` and one ```b``` where ```e1*a + e2*b+1 ``` . We will be able to find ```a``` and ```b``` using the extended version of the Euclides Algorithm.<br>
+If ```e1``` and ```e2``` are prime numbers, then ```mdc(e1,e2) = 1```, meaning the will be at least one ```a``` and one ```b``` where ```e1*a + e2*b+1 ``` . We will be able to find ```a``` and ```b``` using the extended version of the Euclides Algorithm which is used on the python script.<br>
 We can say that ```C1^a * C2^a == M^(e1*a) * M^(e^b) == M (mod n)```, then we can say that ```M = (C1^a)*(C2^b) mod n```.
 If the value of ```a``` or ```b``` is negative then we will have problems with the equation above. In our case, ```b``` was negative and we considered ```i=(C2^-1) mod n ``` the modular inverse of ```C2```.<br>
 Then it will be ```M=(C1^a)*(i^-b) mod n```.
