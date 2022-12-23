@@ -178,7 +178,7 @@ ServerName localhost
 # Set the following gloal entry to suppress an annoying warning message
 ServerName localhost
 ```
-* Build and Launch the docker container
+* Build and Launch the docker container<br>
 ![Terminal print 1](images/logbook11/1.png)
 
 After acessing container root (like in the setup section of this logbook) you copy certificate and key from the volumes directory
