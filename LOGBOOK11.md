@@ -120,8 +120,6 @@ Adding the following option to the CSR generator command we will add alternative
                           DNS:www.fsi2022B.com"
 ````
 
-![task2_2_1](images/logbook11/task2_1_2.png)
-
 ## Task 3
 
 Now, we can turn the CSR created previously into a certficate 'server.crt', using the CA's 'ca.crt' and 'ca.key' by running the following command:
