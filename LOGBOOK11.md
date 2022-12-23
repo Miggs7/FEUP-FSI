@@ -2,7 +2,11 @@
 
 ## Setup
 
-After building the composer image you need to run 'docker-compose up' or its alias 'dcup' to have the container running in the background.
+First build the composer image with 'docker-compose build' or its alias 'dcbuild'
+
+![dcbuild](images/logbook11/dcbuild.png)
+
+Then you need to run 'docker-compose up' or its alias 'dcup' to have the container running in the background.
 
 ![dcup](images/logbook11/1.png)
 
