@@ -320,7 +320,7 @@ For this challenge, we want to decypher some messages. To start we need to find 
 Then, we write this encrypted signal on the variable enc_flag with b before the encrypted signal.
 The e variable from the template is in binary and switching to decimal equals 65537.
 The variable n is equal to the multiplication between p and q, which are two random large prime numbers while d is the private key as the inverse of e given private total.
-```
+```python
 from binascii import hexlify, unhexlify
 from sympy import *
 
@@ -350,3 +350,51 @@ print(y.decode())
 After we run the script with the changes done, we get the flag.
 
 ![Terminal print flag](/images/CTFs12/flag.png)
+
+## Challenge 2
+
+For this CTF we first get from the nc command 
+
+![CTF](/images/logbook11/ctf2.png)
+
+We will use the following script to obtain the flag :
+
+```python
+e1 = 65537
+e2 = 65539
+n = 29802384007335836114060790946940172263849688074203847205679161119246740969024691447256543750864846273960708438254311566283952628484424015493681621963467820718118574987867439608763479491101507201581057223558989005313208698460317488564288291082719699829753178633499407801126495589784600255076069467634364857018709745459288982060955372620312140134052685549203294828798700414465539743217609556452039466944664983781342587551185679334642222972770876019643835909446132146455764152958176465019970075319062952372134839912555603753959250424342115581031979523075376134933803222122260987279941806379954414425556495125737356327411
+
+m1 = 0x490c77d8212053ed58bdb013b14e5a06f6b7a421c1f32cbe296f8800409277448e7a3defa6bb0106d6c3f59b6b684c92d392f49e7a3cb97fa6477b09de3e95321fcbc776e63d46cc7e2e3a64e7c375f7a6a4e0057eac29af2f8844dcb52798cc031e226e91102884eca63a8b30b41fec7f2692e2716341b739c54ae083866cd6070d55e9a6f42dc14cb8c593d51278b83aec0fad9a6456590c7f81238bec348227eda1ae06bb865e67fcf0b1782e321b683d9eac350430cb876099a9073ea165217d165661d20eb0014d5c328bcd56d7d67ad01dc8bd1e6e0e6d220069aab92bb46720502f5814ccf467b61d15146397fdb2f44e93e637113e4371427b5e7cd9
+
+m2 = 0xa917ef1a3eda8ba23e3821293a0c20767352d341e566b05c4122dbcd511e1d7a05ef3cbb41e56a67badd9fd2a825fc66fa618a38bb848786fbb60bd3dea58885913a545776167838f4d939ee72b3cf1827cd970ed4c41c5cdad102297d62c86a657795bd0da66926f4d0d3f1a885a3ec6bc34e443cda28f39e16a11973abefd4aca66d0d25c4bdd3d24f23ebc5c25d1853b5eced7ec1c6e626a9b8a233eda5b46610fefc892b0596950c36218e3db386cea374398e07383f8fa9dcca9748a93bc4046cff19391f6934e94d6ef39127401a5eaa79e67e22edcb44a9a3a66c77342e27210c4ac5ab2fbb4754f8f322eafdc46b3b19f724f829c47206391fce465e
+
+
+def gcdExtended(a, b):
+    if a == 0:
+        return b, 0, 1
+    gcd, x1, y1 = gcdExtended(b % a, a)
+    a = y1 - (b//a) * x1
+    b= x1
+
+    return gcd, a, b
+
+g, a ,b = gcdExtended(e1, e2)
+
+i = pow(m2, -1, n)
+tmp1 = pow(m1, a)
+tmp2 = pow(i, -b)
+M = tmp1 * tmp2 % n
+
+print(M.to_bytes(256,'big').decode())
+
+```
+
+![flag2](/images/logbook11/flag2.png)
+
+In RSA to encrypt a message we do ```C = (M^e) mod n```, where ```C``` is the encrypted message, ```M``` the original message, ```e``` the public exponent and ```n``` the modules. We have ```C1=(M^e1) mod n``` and ```C2=(M^e2) mod n```.
+If ```e1``` and ```e2``` are prime numbers, then ```mdc(e1,e2) = 1```, meaning the will be at least one ```a``` and one ```b``` where ```e1*a + e2*b+1 ``` . We will be able to find ```a``` and ```b``` using the extended version of the Euclides Algorithm.<br>
+We can say that ```C1^a * C2^a == M^(e1*a) * M^(e^b) == M (mod n)```, then we can say that ```M = (C1^a)*(C2^b) mod n```.
+If the value of ```a``` or ```b``` is negative then we will have problems with the equation above. In our case, ```b``` was negative and we considered ```i=(C2^-1) mod n ``` the modular inverse of ```C2```.<br>
+Then it will be ```M=(C1^a)*(i^-b) mod n```.
+
+
